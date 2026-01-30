@@ -187,7 +187,7 @@ function setupAuthForms() {
             })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = "admin.html"; // Ensure this matches your admin HTML file name
+                    window.location.href = "/admin"; // Ensure this matches your admin HTML file name
                 } else {
                     if(errorDiv) errorDiv.classList.remove("d-none");
                 }

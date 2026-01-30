@@ -261,7 +261,7 @@
   <!-- JS to load events and handle form -->
   <script>
 	document.addEventListener("DOMContentLoaded", () => {
-	  fetch("http://localhost:8080/api/events/all")
+	  fetch("api/events/all")
 	    .then((res) => res.json())
 	    .then((events) => {
 	      const select = document.getElementById("eventSelect");
@@ -287,7 +287,7 @@
 		  const eventSelect = document.getElementById("eventSelect");
 		  data.eventName = eventSelect.options[eventSelect.selectedIndex].textContent;
 
-		  fetch("http://localhost:8080/api/event-registration", {
+		  fetch("/api/event-registration", {
 		    method: "POST",
 		    headers: {
 		      "Content-Type": "application/json",

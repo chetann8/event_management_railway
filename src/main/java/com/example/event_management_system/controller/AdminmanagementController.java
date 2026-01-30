@@ -22,8 +22,11 @@ public class AdminmanagementController {
     // ✅ Admin Login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Admin admin) {
-        // Allow default hardcoded admin
-        if ("admin".equals(admin.getUserId()) && "shang".equals(admin.getPassword())) {
+    	System.out.println("Login attempt:");
+        System.out.println("Received ID: " + admin.getUserId());
+        System.out.println("Received Password: " + admin.getPassword());
+    	// Allow default hardcoded admin
+        if ("admin".equals(admin.getUserId().trim()) && "shang".equals(admin.getPassword().trim())) {
             return ResponseEntity.ok("Login successful");
         }
 

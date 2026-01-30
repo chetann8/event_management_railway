@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - Event Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<scriptdiv class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 sidebar">
+      <h4 class="text-center mb-4">Admin Panel</h4>
+      <button class="nav-btn active" data-section="dashboard">📊 Dashboard</button>
+      <button class="nav-btn" data-section="students">🎓 Manage Students</button>
+      <button class="nav-btn" data-section="events">📅 Manage Events</button>
+      <button class="nav-btn" data-section="admins">👤 Manage Admin</button>
+      <a href="/index" class="nav-btn text-center bg-light text-dark mt-4">🏠 Home</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 p-4">
+      <h2 id="sectionTitle">Dashboard</h2>
+
+      <!-- Dashboard Section -->
+      <div class="content-section active" id="dashboard">
+        <div class="card p-4">
+          <h4>Welcome to Admin Dashboard</h4>
+          <p>Select a category from the left to manage.</p>
+        </div>
+      </div>
+	  
+	  <!--<div id="dashboardStudentContainer">
+	  <div class="container">
+	      <h1>Admin Dashboard: View Registered Students</h1>
+
+	      <label for="eventSelect" class="form-label fw-semibold">Select Event</label>
+	      <select id="eventSelect" aria-label="Select an event">
+	        <option value="" disabled selected>Select an event</option>
+	      </select>
+
+	      <div id="studentsContainer">
+	        Student table will be rendered here
+	      </div>
+	    </div>
+	  </div>-->
+	  
+	  
+	  <!-- Student Section -->
+	  <div class="content-section" id="students">
+	    <div class="card-container">
+	      <div class="action-card" onclick="showsection('addStudentForm')">
+	        <i class="fas fa-user-plus"></i>
+	        <div>Add Student</div>
+	      </div>
+	      <div class="action-card" onclick="showsection('updateStudentForm')">
+	        <i class="fas fa-user-edit"></i>
+	        <div>Update Student</div>
+	      </div>
+	      <div class="action-card" onclick="showsection('deleteStudentForm')">
+	        <i class="fas fa-user-times"></i>
+	        <div>Delete Student</div>
+	      </div>
+	      <div class="action-card" onclick="showsection('viewStudentSection'); viewStudents();">
+	        <i class="fas fa-users"></i>
+	        <div>View Students</div>
+	      </div>
+	    </div>
+
+		<!-- WHITESPACE: Forms and Results Section -->
+		<div id="studentFormsContainer" style="margin-top: 30px;">
+
+		  <!-- Add Student -->
+		  <div id="addStudentForm" class="student-form" style="display: none;">
+		    <h3>Add Student</h3>
+		    <form onsubmit="submitStudent(event, 'add')">
+		      <input type="text" id="addRegId" placeholder="Registration ID" required><br>
+		      <input type="email" id="addEmail" placeholder="Email" required><br>
+		      <input type="password" id="addPassword" placeholder="Password" required><br>
+		      <button type="submit">Add Student</button>
+		    </form>
+		  </div>
+
+		  <!-- Update Student Form -->
+		  <div id="updateStudentForm" class="student-form" style="display:none;">
+		    <h3>Update Student</h3>
+		    <form onsubmit="submitStudent(event, 'update')">
+		      <select id="updateSelect" onchange="fillUpdateFields()" class="form-select mb-2"></select>
+		      <input type="text" id="updateRegId" placeholder="Registration ID" name="registrationId" required class="form-control mb-2"/>
+		      <input type="email" id="updateEmail" placeholder="Email" name="email" required class="form-control mb-2"/>
+		      <input type="password" id="updatePassword" placeholder="Password" name="password" required class="form-control mb-2"/>
+		      <button type="submit" class="btn btn-primary">Update Student</button>
+		    </form>
+		  </div>
+
+		  <!-- Delete Student Form -->
+		  <div id="deleteStudentForm" class="student-form" style="display:none;">
+		    <h3>Delete Student</h3>
+		    <form onsubmit="submitStudent(event, 'delete')">
+		      <select id="deleteRegId" class="form-select mb-2"></select><br>
+		      <button type="submit" class="btn btn-danger">Delete Student</button>
+		    </form>
+		  </div>
+
+		  <!-- View Students -->
+		  <div id="viewStudentSection" class="student-form" style="display: none;">
+		    <h3>Student List</h3>
+
+		    <!-- Search box -->
+		    <input
+		      type="text"
+		      id="studentSearch"
+		      placeholder="Search by Registration ID or Email"
+		      onkeyup="filterStudents()"
+		      class="form-control mb-3"
+		      style="max-width: 400px;"
+		    />
+
+		    <table class="table table-bordered" id="studentTable">
+		      <thead class="table-dark">
+		        <tr>
+		          <th>Registration ID</th>
+		          <th>Email</th>
+		          <th>Password</th>
+		        </tr>
+		      </thead>
+		      <tbody></tbody>
+		    </table>
+		  </div>
+</div>
+		</div>
+
+		<!-- Event Section -->
+		<div class="content-section" id="events">
+		  <div class="card-container">
+		    <div class="action-card" onclick="toggleAddEventForm()">
+		      <i class="fas fa-calendar-plus"></i>
+		      <div>Add Event</div>
+		    </div>
+		    <div class="action-card" onclick="toggleUpdateEventForm()">
+		      <i class="fas fa-pen-to-square"></i>
+		      <div>Update Event</div>
+		    </div>
+		    <div class="action-card" onclick="toggleDeleteEventForm()">
+		      <i class="fas fa-calendar-times"></i>
+		      <div>Delete Event</div>
+		    </div>
+		    <div class="action-card" onclick="toggleViewEventForm()">
+		      <i class="fas fa-calendar-alt"></i>
+		      <div>View Events</div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- Improved Add Event Form -->
+		<div id="add-event-form" class="p-4 bg-white rounded shadow-sm" style="display: none;">
+		  <h3 class="mb-4 text-primary">Add New Event</h3>
+		  <form id="eventForm" novalidate>
+		    <div class="mb-3">
+		      <label for="eventName" class="form-label fw-semibold">Event Name</label>
+		      <input type="text" class="form-control" id="eventName" name="eventName" placeholder="Enter event name" required />
+		    </div>
+
+		    <div class="row">
+		      <div class="mb-3 col-md-6">
+		        <label for="eventDate" class="form-label fw-semibold">Event Date</label>
+		        <input type="date" class="form-control" id="eventDate" name="eventDate" required />
+		      </div>
+		      <div class="mb-3 col-md-6">
+		        <label for="eventTime" class="form-label fw-semibold">Event Time</label>
+		        <input type="time" class="form-control" id="eventTime" name="eventTime" required />
+		      </div>
+		    </div>
+
+		    <div class="mb-3">
+		      <label for="eventPlace" class="form-label fw-semibold">Event Place</label>
+		      <input type="text" class="form-control" id="eventPlace" name="eventPlace" placeholder="Enter venue/location" required />
+		    </div>
+
+		    <div class="mb-3">
+		      <label for="eventDescription" class="form-label fw-semibold">Event Description</label>
+		      <textarea class="form-control" id="eventDescription" name="eventDescription" rows="4" placeholder="Describe the event" required></textarea>
+		    </div>
+
+		    <div class="mb-4">
+		      <label for="eventImage" class="form-label fw-semibold">Event Image URL / Base64</label>
+		      <input type="text" class="form-control" id="eventImage" name="eventImage" placeholder="Paste image URL or base64 string" required />
+		    </div>
+
+		    <button type="submit" class="btn btn-primary px-4 py-2 fw-bold">
+		      <i class="fas fa-plus-circle me-2"></i> Add Event
+		    </button>
+		  </form>
+		</div>
+
+		<!-- Update Event Form -->
+		<div id="update-event-form" class="p-4 bg-white rounded shadow-sm mt-4" style="display: none;">
+		  <h3 class="mb-4 text-warning">Update Event</h3>
+		  <form id="updateForm">
+		    <div class="mb-3">
+		      <label for="updateEventSelect" class="form-label fw-semibold">Select Event</label>
+		      <select id="updateEventSelect" class="form-select" required></select>
+		    </div>
+
+		    <div class="mb-3">
+		      <label for="updateEventName" class="form-label fw-semibold">Event Name</label>
+		      <input type="text" class="form-control" id="updateEventName" required />
+		    </div>
+		    <div class="row">
+		      <div class="mb-3 col-md-6">
+		        <label for="updateEventDate" class="form-label fw-semibold">Event Date</label>
+		        <input type="date" class="form-control" id="updateEventDate" required />
+		      </div>
+		      <div class="mb-3 col-md-6">
+		        <label for="updateEventTime" class="form-label fw-semibold">Event Time</label>
+		        <input type="time" class="form-control" id="updateEventTime" required />
+		      </div>
+		    </div>
+		    <div class="mb-3">
+		      <label for="updateEventPlace" class="form-label fw-semibold">Event Place</label>
+		      <input type="text" class="form-control" id="updateEventPlace" required />
+		    </div>
+		    <div class="mb-3">
+		      <label for="updateEventDescription" class="form-label fw-semibold">Event Description</label>
+		      <textarea class="form-control" id="updateEventDescription" rows="4" required></textarea>
+		    </div>
+		    <div class="mb-4">
+		      <label for="updateEventImage" class="form-label fw-semibold">Event Image</label>
+		      <input type="text" class="form-control" id="updateEventImage" required />
+		    </div>
+
+		    <button type="submit" class="btn btn-warning fw-bold">
+		      <i class="fas fa-pen-to-square me-2"></i> Update Event
+		    </button>
+		  </form>
+		</div>
+
+		<!-- Delete Event Form -->
+		<div id="delete-event-form" class="p-4 bg-white rounded shadow-sm mt-4" style="display: none;">
+		  <h3 class="mb-4 text-danger">Delete Event</h3>
+		  <form id="deleteForm">
+		    <div class="mb-3">
+		      <label for="deleteEventSelect" class="form-label fw-semibold">Select Event to Delete</label>
+		      <select id="deleteEventSelect" class="form-select" required></select>
+		    </div>
+		    <button type="submit" class="btn btn-danger fw-bold">
+		      <i class="fas fa-trash-alt me-2"></i> Delete Event
+		    </button>
+		  </form>
+		</div>
+
+		<!-- View All Events Table -->
+		<div id="view-event-form" class="p-4 bg-white rounded shadow-sm mt-4" style="display: none;">
+		  <h3 class="mb-4 text-primary">All Events</h3>
+		  <div class="table-responsive">
+		    <table class="table table-striped table-bordered">
+		      <thead class="table-dark">
+		        <tr>
+		          <th>Event Name</th>
+		          <th>Date</th>
+		          <th>Time</th>
+		          <th>Place</th>
+		          <th>Description</th>
+		        </tr>
+		      </thead>
+		      <tbody id="eventsTableBody"></tbody>
+		    </table>
+		  </div>
+		</div>
+			
+				<!-- Admin Section -->
+				<div class="content-section" id="admins">
+				  <div class="card-container">
+				    <div class="action-card" onclick="showSection('add')">
+				      <i class="fas fa-user-shield"></i>
+				      <div>Add Admin</div>
+				    </div>
+				    <div class="action-card" onclick="showSection('edit')">
+				      <i class="fas fa-user-edit"></i>
+				      <div>Edit Admin</div>
+				    </div>
+				    <div class="action-card" onclick="showSection('delete')">
+				      <i class="fas fa-user-times"></i>
+				      <div>Delete Admin</div>
+				    </div>
+					<div class="action-card" onclick="showSection('viewAdmins')">
+					  <i class="fas fa-users-cog"></i>
+					  <div>View Admins</div>
+					</div>
+				  </div>
+
+				  <!-- Inline Forms Section -->
+				    <div id="adminForms">
+				      <!-- Add Admin Form -->
+				      <form id="addForm" class="d-none" onsubmit="addAdmin(event)">
+				        <h5>Add Admin</h5>
+				        <div class="row g-2 mb-2">
+				          <div class="col"><input required class="form-control" placeholder="User ID" id="addUserId"></div>
+				          <div class="col"><input required class="form-control" placeholder="Name" id="addName"></div>
+				          <div class="col"><input required class="form-control" placeholder="Department" id="addDept"></div>
+				          <div class="col"><input required class="form-control" type="password" placeholder="Password" id="addPassword"></div>
+				          <div class="col-auto"><button class="btn btn-primary" type="submit">Add</button></div>
+				        </div>
+				      </form>
+
+				      <!-- Edit Admin Form -->
+				      <form id="editForm" class="d-none" onsubmit="editAdmin(event)">
+				        <h5>Edit Admin</h5>
+				        <div class="row g-2 mb-2">
+				          <div class="col">
+				            <select id="editUserIdDropdown" class="form-select" required>
+				              <option value="" disabled selected>Select Admin</option>
+				            </select>
+				          </div>
+				          <div class="col"><input required class="form-control" placeholder="Updated Name" id="editName"></div>
+				          <div class="col"><input required class="form-control" placeholder="Updated Department" id="editDept"></div>
+				          <div class="col"><input required class="form-control" type="password" placeholder="New Password" id="editPassword"></div>
+				          <div class="col-auto"><button class="btn btn-success" type="submit">Update</button></div>
+				        </div>
+				      </form>
+
+				      <!-- Delete Admin Form -->
+				      <form id="deleteAForm" class="d-none" onsubmit="deleteAdmin(event)">
+				        <h5>Delete Admin</h5>
+				        <div class="row g-2 mb-2">
+				          <div class="col">
+				            <select id="deleteUserIdDropdown" class="form-select" required>
+				              <option value="" disabled selected>Select Admin to Delete</option>
+				            </select>
+				          </div>
+				          <div class="col-auto"><button class="btn btn-danger" type="submit">Delete</button></div>
+				        </div>
+				      </form>
+				    
+
+					<!-- Admin Table Section -->
+					<div id="viewAdminsSection" class="d-none">
+					  <h5 class="mt-4">Admin List</h5>
+					  <table class="table table-bordered table-striped" id="adminTable">
+					    <thead>
+					      <tr>
+					        <th>User ID</th>
+					        <th>Name</th>
+					        <th>Department</th>
+					      </tr>
+					    </thead>
+					    <tbody></tbody>
+					  </table>
+					</div>
+			</div>
+		</div>
+</div>
+
+<!-- Toast Container -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+  <div id="toastMessage" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toastBody">Success message here</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>
